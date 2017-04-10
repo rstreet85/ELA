@@ -18,7 +18,11 @@
  */
 package ela;
 
-//Convenient place for default pixel values.
+/**
+ * This class is just meant to hold specific pixel values for marking changes in compression.
+ * 
+ * @author robert
+ */
 public enum Pixel {
     
     BLACK(0, 0, 0),
