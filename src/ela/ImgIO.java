@@ -20,13 +20,19 @@ package ela;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * This class contains utility methods for transforming image data.
+ * 
+ * @author robert
+ */
+
 public class ImgIO {
     
     /**
      * Send this method a BufferedImage to get an RGB array (int, value 0-255).
      * 
      * @param img   BufferedImage, the input image from which to extract RGB
-     * @return rgb  int[][][], a 3-dimension array of RGB values from image
+     * @return int[][][], a 3-dimension array of RGB values from image
      * 
      */
     public static int[][][] RGBArray(BufferedImage img) {
@@ -51,7 +57,7 @@ public class ImgIO {
      * Send this method an array of RGB pixels (int) to get a BufferedImage.
      * 
      * @param raw   int[][][] representing RGB pixels of image.
-     * @return img  BufferedImage built from RGB array
+     * @return BufferedImage built from RGB array
      */
     public static BufferedImage RGBImg(int[][][] raw) {
         BufferedImage img = null;
@@ -75,7 +81,7 @@ public class ImgIO {
      * Send this method a 32-bit pixel value from BufferedImage to get the RGB
      * 
      * @param bits  int, 32-bit BufferedImage pixel value
-     * @return rgb  int[], RGB values extracted from pixel  
+     * @return int[], RGB values extracted from pixel  
      */
     private static int[] intRGB(int bits) {
         int[] rgb = { (bits >> 16) & 0xff, (bits >> 8) & 0xff, bits & 0xff };
@@ -93,6 +99,9 @@ public class ImgIO {
     }
     
     /**
+     * Send this method a BufferedImage base, a BufferedImage mask, an int[] mask color,
+     * and an int threshold to mask the base image with all pixels in the mask image that
+     * meet/exceed the threshold with the supplied color.
      * 
      * @param baseImage     BufferedImage, the base image which is to be masked over.
      * @param maskImage     BufferedImage, the masking image. This is a difference image.

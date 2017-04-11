@@ -30,16 +30,26 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
+/**
+ * This class holds methods for all major steps of error-level analysis.
+ * 
+ * @author robert
+ */
+
 public class ELA {
     
-    /*
-        Accepts a BufferedImage and compression quality, creates compressed version.
-        Currently writes image to file, will change later...
-    */
+    /**
+     * Send this method a BufferedImage which needs to be compressed to an arbitrary JPEG level.
+     * 
+     * @param image Source image to compress
+     * @param compressionLevel  JPEG compression level, generally ~0.95
+     * @return BufferedImage that is compressed version of source image
+     */
     public static BufferedImage GetCompressedImage(BufferedImage image, float compressionLevel) {
         BufferedImage compressed = null;
         
         try {
+            //Easiest to write to file at first, find a way to feed into stream...
             File writeToFile = new File("temp.jpg");
             
             //JPEG compression settings
@@ -52,7 +62,6 @@ public class ELA {
             jpgParams.setCompressionQuality(compressionLevel);
             
             //Write to a file, then read.
-            //Replace later w/ something better
             imgWriter.write(null, new IIOImage(image, null, null), jpgParams);
             imgWriter.dispose();
             
@@ -62,20 +71,21 @@ public class ELA {
             try {
                 Files.delete(path);
             } catch (IOException ex) {
-                System.out.println("Error deleting temporary file...\n " + ex.getMessage() + "\n");
+                System.out.println("GetCompressedImage: Error deleting temporary file...\n " + ex.getMessage() + "\n");
             }            
         } catch (IOException ex) {
-            System.out.println("Error creating compressed image...\n" + ex.getMessage() + "\n");
+            System.out.println("GetCompressedImage: Error creating compressed image...\n" + ex.getMessage() + "\n");
         }
         
         return compressed;
     }
     
-    /*
-        Accepts image and its compressed version, subtracts compressed from original.
-        If there is no difference after compression, pixel = (0, 0, 0) (black).
-        If there is a difference, pixel = (>0, >0, >0), then scaled to 255.
-    */
+    /**
+     * 
+     * @param image BufferedImage, the uncompressed original image
+     * @param compressed    BufferedImage, the compressed version of the original
+     * @return BufferedImage, each pixel's RGB is the difference between the original & compressed RGB values.
+     */
     public static BufferedImage GetDifferenceImage(BufferedImage image, BufferedImage compressed) {
         BufferedImage difference = null;
         int height = image.getHeight();

@@ -29,6 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
+/**
+ * This class is a tester for the ELA library.
+ * 
+ * @author robert
+ */
+
 public class Main {
     
     //Default settings
@@ -44,42 +50,52 @@ public class Main {
         boolean isFile = inputFile.isFile();
         boolean isFolder = inputFile.isDirectory();
         Mode mode = (exists && isFile) ? Mode.FILE : (exists && isFolder) ? Mode.FOLDER : Mode.ERR;
+        String filename = null;
         
-        if (mode.equals(Mode.FILE)) {   //Single file mode
-            String filename = getFileName(args[0]);
-            System.out.println("\nExamining File " + filename + "...");
+        switch (mode) {
+            case FILE:
+                filename = getFileName(args[0]);
+                System.out.println("\nExamining File " + filename + "...");
+
+                runELA(inputFile, filename, MASK_RGB);
+                System.out.println("\nFinished...\n\n");
+                break;
             
-            runELA(inputFile, filename, MASK_RGB);
-            System.out.println("\nFinished...\n\n");
-        } else if (mode.equals(Mode.FOLDER)) {  //Directory mode
-            //Make a list only of jpg, png files for now...
-            List<Path> imageFiles = new ArrayList();
-            
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(args[0]), "*.{jpg,jpeg,png}")) {
-                for (Path filePath : stream) {
-                    System.out.println("Adding File " + filePath.toString() + "...");
-                    imageFiles.add(filePath);
+            case FOLDER:
+                //Make a list only of jpg, png files for now...
+                List<Path> imageFiles = new ArrayList();
+
+                try (DirectoryStream<Path> stream = 
+                        Files.newDirectoryStream(Paths.get(args[0]), "*.{jpg,jpeg,png}")) {
+                    for (Path filePath : stream) {
+                        //System.out.println("Adding File " + filePath.toString() + "...");
+                        imageFiles.add(filePath);
+                    }
+                } catch(IOException ex) {
+                    System.out.println("\nError Creating File List...\n" + ex.getMessage() + "\n");
                 }
-            } catch(IOException ex) {
-                System.out.println("\nError Creating File List...\n" + ex.getMessage() + "\n");
-            }
-            
-            for (Path filePath : imageFiles) {
-                String filename = getFileName(filePath.toString());
-                
-                System.out.println("Examining File " + filePath.toString() + "...");
-                runELA(filePath.toFile(), filename, MASK_RGB);
-            }
-            
-            System.out.println("Finished...");
-        } else {
-            System.out.println("Unknown mode...\nFinished...\n");
+
+                for (Path filePath : imageFiles) {
+                    filename = getFileName(filePath.toString());
+
+                    System.out.println("Examining File " + filePath.toString() + "...");
+                    runELA(filePath.toFile(), filename, MASK_RGB);
+                }
+
+                System.out.println("Finished...");
+                break;
         }
     }
     
-    /*
-        Runs error level analysis for file using settings
-    */
+    /**
+     * Send this class an image File, a string for desired output file name, and an int[]
+     * RGB value to run ELA on that File, masking the difference with the given RGB value
+     * and saving the file to the file name.
+     * 
+     * @param inputFile File, image on which to run ELA
+     * @param filename  String, desired filename for resulting image file.
+     * @param maskValue int[], RGB value to use when masking aberrant pixels
+     */
     private static void runELA(File inputFile, String filename, int[] maskValue) {
         try {
             //Read image and create compressed version
@@ -91,17 +107,24 @@ public class Main {
             ImageIO.write(imgDifference, "jpg", new File(filename + "_difference.jpg"));
 
             //Mask original image with difference image and save it
-            BufferedImage imgMasked = ImgIO.MaskImages(imgInput, imgDifference, maskValue, DIFF_THRESH_DEFAULT);
+            BufferedImage imgMasked = ImgIO.MaskImages(imgInput, imgDifference, maskValue,
+                    DIFF_THRESH_DEFAULT);
             ImageIO.write(imgMasked, "jpg", new File(filename + "_masked.jpg"));
         } catch(IOException ex) {
-            System.out.println("Error Running Error Level Analysis..." + ex.getMessage() + "\n");
+            System.out.println("RunELA: Error Running Error Level Analysis on file " 
+                    + filename + "..." + ex.getMessage() + "\n");
         }
     }
     
-    /*
-        Trim file extension from file name
-    */
+    /**
+     * Send this method a string of the input file name to get a modified string for the
+     * output file name.
+     * 
+     * @param name String, file name of input file.
+     * @return String, file name for output file.
+     */
     private static String getFileName(String name) {
+        //TODO: Make this more advanced later, not robust enough
         int length = name.length();
         
         if (name.charAt(length - 4) == '.') {
