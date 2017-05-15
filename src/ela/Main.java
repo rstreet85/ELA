@@ -49,6 +49,7 @@ public class Main {
         boolean exists = inputFile.exists();
         boolean isFile = inputFile.isFile();
         boolean isFolder = inputFile.isDirectory();
+        //TODO: shorten this
         Mode mode = (exists && isFile) ? Mode.FILE : (exists && isFolder) ? Mode.FOLDER : Mode.ERR;
         String filename = null;
         
