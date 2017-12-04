@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * @author Robert Streetman
  */
 package ela;
 
@@ -30,18 +29,16 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 /**
- * This class is a tester for the ELA library.
+ * This class is for testing, demonstrating use of error-level analysis library.
  * 
- * @author robert
+ * @author Robert Streetman
  */
-
 public class Main {
-    
     //Default settings
-    private static enum Mode { FILE, FOLDER, ERR };
-    private static final float COMPRESSION_PERCENT_DEFAULT = 0.95f;
-    private static final int DIFF_THRESH_DEFAULT = 15;
-    private static final int[] MASK_RGB = Pixel.MAGENTA.RGB();
+    private static enum Mode { FILE, FOLDER, ERR };             //Strings for different modes
+    private static final float COMP_PCT_DEF = 0.95f;            //Default JPG recompression percentage
+    private static final int DIFF_THRESH_DEF = 15;              //Default threshold for error level difference
+    private static final int[] MASK_RGB = Pixel.MAGENTA.RGB();  //Default mask pixel color
 
     public static void main(String[] args) {
         //Check whether user wants single image file or all image files in directory
@@ -49,11 +46,11 @@ public class Main {
         boolean exists = inputFile.exists();
         boolean isFile = inputFile.isFile();
         boolean isFolder = inputFile.isDirectory();
-        //TODO: shorten this
         Mode mode = (exists && isFile) ? Mode.FILE : (exists && isFolder) ? Mode.FOLDER : Mode.ERR;
         String filename = null;
         
         switch (mode) {
+            //Run ELA on a single image file...
             case FILE:
                 filename = getFileName(args[0]);
                 System.out.println("\nExamining File " + filename + "...");
@@ -61,7 +58,7 @@ public class Main {
                 runELA(inputFile, filename, MASK_RGB);
                 System.out.println("\nFinished...\n\n");
                 break;
-            
+            //Run ELA on all images in designated folder....
             case FOLDER:
                 //Make a list only of jpg, png files for now...
                 List<Path> imageFiles = new ArrayList();
@@ -93,15 +90,15 @@ public class Main {
      * RGB value to run ELA on that File, masking the difference with the given RGB value
      * and saving the file to the file name.
      * 
-     * @param inputFile File, image on which to run ELA
-     * @param filename  String, desired filename for resulting image file.
-     * @param maskValue int[], RGB value to use when masking aberrant pixels
+     * @param inputFile Image file input
+     * @param filename  Desired name for the output file.
+     * @param maskValue RGB value to use when masking aberrant pixels
      */
     private static void runELA(File inputFile, String filename, int[] maskValue) {
         try {
             //Read image and create compressed version
             BufferedImage imgInput = ImageIO.read(inputFile);
-            BufferedImage imgCompressed = ELA.GetCompressedImage(imgInput, COMPRESSION_PERCENT_DEFAULT);
+            BufferedImage imgCompressed = ELA.GetCompressedImage(imgInput, COMP_PCT_DEF);
             
             //Get difference image and save it
             BufferedImage imgDifference = ELA.GetDifferenceImage(imgInput, imgCompressed);
@@ -109,7 +106,7 @@ public class Main {
 
             //Mask original image with difference image and save it
             BufferedImage imgMasked = ImgIO.MaskImages(imgInput, imgDifference, maskValue,
-                    DIFF_THRESH_DEFAULT);
+                    DIFF_THRESH_DEF);
             ImageIO.write(imgMasked, "jpg", new File(filename + "_masked.jpg"));
         } catch(IOException ex) {
             System.out.println("RunELA: Error Running Error Level Analysis on file " 

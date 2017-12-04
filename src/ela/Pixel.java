@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * @author Robert Streetman
  */
 package ela;
 
 /**
- * This class is just meant to hold specific pixel values for marking changes in compression.
+ * This class is simply holds specific pixel values for vvarious uses.
  * 
- * @author robert
+ * @author Robert Streetman
  */
 public enum Pixel {
-    
+    //Access these pixel values by name
     BLACK(0, 0, 0),
     BLUE(0, 0, 255),
     CYAN(0, 255, 255),
@@ -43,6 +42,11 @@ public enum Pixel {
         rgb[2] = blue;
     }
 
+    /**
+     * Returns the RGB value of the enumerated color.
+     * 
+     * @return The RGB value of the enumerated color.
+     */
     public int[] RGB() {
         return rgb;
     }

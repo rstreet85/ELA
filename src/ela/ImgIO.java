@@ -14,16 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * @author Robert Streetman
  */
 package ela;
 
 import java.awt.image.BufferedImage;
 
 /**
- * This class contains utility methods for transforming image data.
+ * This class contains utility methods for extracting/inserting data into image files.
  * 
- * @author robert
+ * @author Robert Streetman
  */
 
 public class ImgIO {
@@ -32,8 +31,7 @@ public class ImgIO {
      * Send this method a BufferedImage to get an RGB array (int, value 0-255).
      * 
      * @param img   BufferedImage, the input image from which to extract RGB
-     * @return int[][][], a 3-dimension array of RGB values from image
-     * 
+     * @return      A 3-dimensional array of RGB values from image
      */
     public static int[][][] RGBArray(BufferedImage img) {
         int[][][] rgb = null;
@@ -78,10 +76,10 @@ public class ImgIO {
     }
     
     /**
-     * Send this method a 32-bit pixel value from BufferedImage to get the RGB
+     * Send this method a 32-bit pixel value from BufferedImage to get the RGB.
      * 
-     * @param bits  int, 32-bit BufferedImage pixel value
-     * @return int[], RGB values extracted from pixel  
+     * @param bits  The 32-bit BufferedImage pixel value
+     * @return      RGB values extracted from pixel  
      */
     private static int[] intRGB(int bits) {
         int[] rgb = { (bits >> 16) & 0xff, (bits >> 8) & 0xff, bits & 0xff };
@@ -103,11 +101,11 @@ public class ImgIO {
      * and an int threshold to mask the base image with all pixels in the mask image that
      * meet/exceed the threshold with the supplied color.
      * 
-     * @param baseImage     BufferedImage, the base image which is to be masked over.
-     * @param maskImage     BufferedImage, the masking image. This is a difference image.
-     * @param maskColor     int[], the RGB pixel values desired for the mask color.
-     * @param threshold     int, max pixel value (r+g+b) allowed before marking pixel as changed.
-     * @return BufferedImage where the base image has 'changed' pixels masked.
+     * @param baseImage     The base image which is to be masked over.
+     * @param maskImage     The masking image. This is a difference image.
+     * @param maskColor     The RGB pixel values desired for the mask color.
+     * @param threshold     Max pixel value (r+g+b) allowed before marking pixel as changed.
+     * @return              BufferedImage where the base image has 'changed' pixels masked.
      */
     public static BufferedImage MaskImages(BufferedImage baseImage, BufferedImage maskImage, int[] maskColor, int threshold) {
         BufferedImage result = null;

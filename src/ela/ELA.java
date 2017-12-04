@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * @author Robert Streetman
  */
 package ela;
 
@@ -31,9 +30,9 @@ import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
 /**
- * This class holds methods for all major steps of error-level analysis.
+ * This class holds static methods for performing error-level analysis on image files.
  * 
- * @author robert
+ * @author Robert Streetman
  */
 
 public class ELA {
@@ -43,7 +42,7 @@ public class ELA {
      * 
      * @param image Source image to compress
      * @param compressionLevel  JPEG compression level, generally ~0.95
-     * @return BufferedImage that is compressed version of source image
+     * @return BufferedImage Compressed version of source image
      */
     public static BufferedImage GetCompressedImage(BufferedImage image, float compressionLevel) {
         BufferedImage compressed = null;
@@ -81,10 +80,11 @@ public class ELA {
     }
     
     /**
+     * Creates a difference image from the original image and the slightly re-compressed image.
      * 
-     * @param image BufferedImage, the uncompressed original image
-     * @param compressed    BufferedImage, the compressed version of the original
-     * @return BufferedImage, each pixel's RGB is the difference between the original & compressed RGB values.
+     * @param image             The uncompressed original image
+     * @param compressed        The compressed version of the original
+     * @return BufferedImage    Difference image: each pixel's RGB is the difference between the original & compressed RGB values.
      */
     public static BufferedImage GetDifferenceImage(BufferedImage image, BufferedImage compressed) {
         BufferedImage difference = null;
