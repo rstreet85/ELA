@@ -6,6 +6,8 @@ A suspect image is JPEG-compressed to 95%, and the difference between the origin
 
 By default, program overlays areas of high compression error over the original image in the output (original remains unaltered).
 
+## Example:
+
 ## Usage
 Single file mode example:
 
