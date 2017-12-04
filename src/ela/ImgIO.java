@@ -24,11 +24,11 @@ import java.awt.image.BufferedImage;
  * 
  * @author Robert Streetman
  */
-
+//TODO:Add exceptions for bad input
 public class ImgIO {
     
     /**
-     * Send this method a BufferedImage to get an RGB array (int, value 0-255).
+     * Send this method a BufferedImage to get an RGB array (value 0-255).
      * 
      * @param img   BufferedImage, the input image from which to extract RGB
      * @return      A 3-dimensional array of RGB values from image
@@ -67,7 +67,8 @@ public class ImgIO {
 
             for (int row = 0; row < height; row++) {
                 for (int column = 0; column < width; column++) {
-                    img.setRGB(column, row, (raw[row][column][0] << 16) | (raw[row][column][1] << 8) | (raw[row][column][2]));
+                    img.setRGB(column, row, (raw[row][column][0] << 16)
+                            | (raw[row][column][1] << 8) | (raw[row][column][2]));
                 }
             }
         }
@@ -82,6 +83,7 @@ public class ImgIO {
      * @return      RGB values extracted from pixel  
      */
     private static int[] intRGB(int bits) {
+        //Java rgb values are actually 4 bytes (r,g,b,a) pressed into one 32-bit integer
         int[] rgb = { (bits >> 16) & 0xff, (bits >> 8) & 0xff, bits & 0xff };
         
         //Don't propagate bad pixel values
@@ -107,12 +109,14 @@ public class ImgIO {
      * @param threshold     Max pixel value (r+g+b) allowed before marking pixel as changed.
      * @return              BufferedImage where the base image has 'changed' pixels masked.
      */
-    public static BufferedImage MaskImages(BufferedImage baseImage, BufferedImage maskImage, int[] maskColor, int threshold) {
+    public static BufferedImage MaskImages(BufferedImage baseImage, BufferedImage maskImage,
+            int[] maskColor, int threshold) {
         BufferedImage result = null;
         int height = baseImage.getHeight();
         int width = baseImage.getWidth();
         
-        if (maskColor.length == 3 && height == maskImage.getHeight() && width == maskImage.getWidth()) {
+        if (maskColor.length == 3 && height == maskImage.getHeight()
+                && width == maskImage.getWidth()) {
             int[][][] imgOrig = RGBArray(baseImage);
             int[][][] imgMask = RGBArray(maskImage);
             int[][][] imgResult = new int[height][width][3];

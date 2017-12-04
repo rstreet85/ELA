@@ -34,7 +34,6 @@ import javax.imageio.stream.ImageOutputStream;
  * 
  * @author Robert Streetman
  */
-
 public class ELA {
     
     /**
@@ -44,6 +43,7 @@ public class ELA {
      * @param compressionLevel  JPEG compression level, generally ~0.95
      * @return BufferedImage Compressed version of source image
      */
+    //TODO:Add exceptions for bad input
     public static BufferedImage GetCompressedImage(BufferedImage image, float compressionLevel) {
         BufferedImage compressed = null;
         
@@ -51,7 +51,7 @@ public class ELA {
             //Easiest to write to file at first, find a way to feed into stream...
             File writeToFile = new File("temp.jpg");
             
-            //JPEG compression settings
+            //Set JPEG compression settings
             ImageOutputStream imgStream = ImageIO.createImageOutputStream(writeToFile);
             ImageWriter imgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
             imgWriter.setOutput(imgStream);
@@ -60,20 +60,22 @@ public class ELA {
             jpgParams.setCompressionMode(JPEGImageWriteParam.MODE_EXPLICIT);
             jpgParams.setCompressionQuality(compressionLevel);
             
-            //Write to a file, then read.
+            //Write re-compressed jpg to file.
             imgWriter.write(null, new IIOImage(image, null, null), jpgParams);
             imgWriter.dispose();
             
+            //Read re-compressed jpg to stream
             compressed = ImageIO.read(new File("temp.jpg"));
             Path path = Paths.get("temp.jpg");
             
+            //Delete re-compressed jpg, not needed
             try {
                 Files.delete(path);
             } catch (IOException ex) {
-                System.out.println("GetCompressedImage: Error deleting temporary file...\n " + ex.getMessage() + "\n");
+                System.out.format("GetCompressedImage: Error deleting temporary file: %s...%n", ex.getMessage());
             }            
         } catch (IOException ex) {
-            System.out.println("GetCompressedImage: Error creating compressed image...\n" + ex.getMessage() + "\n");
+            System.out.format("GetCompressedImage: Error creating compressed image: %s...%n", ex.getMessage());
         }
         
         return compressed;
@@ -115,6 +117,7 @@ public class ELA {
                 maxDiff = (chanMaxDiff[i] > maxDiff) ? chanMaxDiff[i] : maxDiff;
             }
             
+            //Rescale all pixel values so that the max value now = 255.
             double scale = 255.0 / maxDiff;
             
             for (int r = 0; r < height; r++) {

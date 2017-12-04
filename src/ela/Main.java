@@ -53,10 +53,10 @@ public class Main {
             //Run ELA on a single image file...
             case FILE:
                 filename = getFileName(args[0]);
-                System.out.println("\nExamining File " + filename + "...");
+                System.out.format("%nExamining File %s...%n", filename);
 
                 runELA(inputFile, filename, MASK_RGB);
-                System.out.println("\nFinished...\n\n");
+                System.out.format("%nFinished...%n%n");
                 break;
             //Run ELA on all images in designated folder....
             case FOLDER:
@@ -66,17 +66,17 @@ public class Main {
                 try (DirectoryStream<Path> stream = 
                         Files.newDirectoryStream(Paths.get(args[0]), "*.{jpg,jpeg,png}")) {
                     for (Path filePath : stream) {
-                        //System.out.println("Adding File " + filePath.toString() + "...");
+                        //System.out.format("Adding File %s...%n", filePath.toString());
                         imageFiles.add(filePath);
                     }
                 } catch(IOException ex) {
-                    System.out.println("\nError Creating File List...\n" + ex.getMessage() + "\n");
+                    System.out.format("%nError Creating File List: %s...%n", ex.getMessage());
                 }
 
                 for (Path filePath : imageFiles) {
                     filename = getFileName(filePath.toString());
 
-                    System.out.println("Examining File " + filePath.toString() + "...");
+                    System.out.format("Examining File %s...", filePath.toString());
                     runELA(filePath.toFile(), filename, MASK_RGB);
                 }
 
@@ -109,8 +109,7 @@ public class Main {
                     DIFF_THRESH_DEF);
             ImageIO.write(imgMasked, "jpg", new File(filename + "_masked.jpg"));
         } catch(IOException ex) {
-            System.out.println("RunELA: Error Running Error Level Analysis on file " 
-                    + filename + "..." + ex.getMessage() + "\n");
+            System.out.format("RunELA: Error Running Error Level Analysis on file %s: %s...%n", filename, ex.getMessage());
         }
     }
     
