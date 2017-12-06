@@ -18,7 +18,7 @@
 package ela;
 
 /**
- * This class is simply holds specific pixel values for vvarious uses.
+ * This class is simply holds specific pixel values for various uses.
  * 
  * @author Robert Streetman
  */

@@ -94,8 +94,8 @@ public class ELA {
         int width = image.getWidth();
         
         if (height == compressed.getHeight() && width == compressed.getWidth()) {
-            int[][][] original = ImgIO.RGBArray(image);
-            int[][][] comp = ImgIO.RGBArray(compressed);
+            int[][][] original = ImageUtils.RGBArray(image);
+            int[][][] comp = ImageUtils.RGBArray(compressed);
             int[][][] diff = new int[height][width][3];
             int[] chanMaxDiff = new int[3]; //Keep track of largest difference in each band
             
@@ -129,7 +129,7 @@ public class ELA {
                 }
             }
             
-            difference = ImgIO.RGBImg(diff);
+            difference = ImageUtils.RGBImg(diff);
         }
         
         return difference;

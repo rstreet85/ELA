@@ -105,7 +105,7 @@ public class Main {
             ImageIO.write(imgDifference, "jpg", new File(filename + "_difference.jpg"));
 
             //Mask original image with difference image and save it
-            BufferedImage imgMasked = ImgIO.MaskImages(imgInput, imgDifference, maskValue,
+            BufferedImage imgMasked = ImageUtils.MaskImages(imgInput, imgDifference, maskValue,
                     DIFF_THRESH_DEF);
             ImageIO.write(imgMasked, "jpg", new File(filename + "_masked.jpg"));
         } catch(IOException ex) {

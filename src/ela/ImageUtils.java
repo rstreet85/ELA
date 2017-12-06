@@ -20,12 +20,12 @@ package ela;
 import java.awt.image.BufferedImage;
 
 /**
- * This class contains utility methods for extracting/inserting data into image files.
+ * This class contains utility methods for moving data into/out of image files.
  * 
  * @author Robert Streetman
  */
 //TODO:Add exceptions for bad input
-public class ImgIO {
+public class ImageUtils {
     
     /**
      * Send this method a BufferedImage to get an RGB array (value 0-255).
