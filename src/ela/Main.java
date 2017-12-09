@@ -73,14 +73,29 @@ public class Main {
                     System.out.format("%nError Creating File List: %s...%n", ex.getMessage());
                 }
 
+                //TODO: Set up executorservice to 
+                //long startTime = System.nanoTime();
+                
                 for (Path filePath : imageFiles) {
+                    //Old method, single threaded
+                    /*
                     filename = getFileName(filePath.toString());
 
-                    System.out.format("Examining File %s...", filePath.toString());
+                    System.out.format("%nExamining File %s...", filePath.toString());
                     runELA(filePath.toFile(), filename, MASK_RGB);
+                    */
+                    
+                    //New method: start new runnable for each file
+                    filename = getFileName(filePath.toString());
+                    Runnable eval = new FileELARunnable(filename, filePath.toFile(), MASK_RGB, COMP_PCT_DEF, DIFF_THRESH_DEF);
+                    Thread thread = new Thread(eval);
+                    thread.start();
                 }
+                
+                //long duration = System.nanoTime() - startTime;
 
-                System.out.println("Finished...");
+                //System.out.format("%n%nFinished directory in %d ns (%d ms)...%n%n", duration, duration / 1000000);
+                System.out.format("%n%nFinished directory...%n%n");
                 break;
         }
     }
@@ -98,7 +113,7 @@ public class Main {
         try {
             //Read image and create compressed version
             BufferedImage imgInput = ImageIO.read(inputFile);
-            BufferedImage imgCompressed = ELA.GetCompressedImage(imgInput, COMP_PCT_DEF);
+            BufferedImage imgCompressed = ELA.GetCompressedImage(imgInput, filename, COMP_PCT_DEF);
             
             //Get difference image and save it
             BufferedImage imgDifference = ELA.GetDifferenceImage(imgInput, imgCompressed);

@@ -44,12 +44,13 @@ public class ELA {
      * @return BufferedImage Compressed version of source image
      */
     //TODO:Add exceptions for bad input
-    public static BufferedImage GetCompressedImage(BufferedImage image, float compressionLevel) {
+    public static BufferedImage GetCompressedImage(BufferedImage image, String fname, float compressionLevel) {
         BufferedImage compressed = null;
         
         try {
             //Easiest to write to file at first, find a way to feed into stream...
-            File writeToFile = new File("temp.jpg");
+            String tmpName = fname + "_temp.jpg";
+            File writeToFile = new File(tmpName);
             
             //Set JPEG compression settings
             ImageOutputStream imgStream = ImageIO.createImageOutputStream(writeToFile);
@@ -65,8 +66,8 @@ public class ELA {
             imgWriter.dispose();
             
             //Read re-compressed jpg to stream
-            compressed = ImageIO.read(new File("temp.jpg"));
-            Path path = Paths.get("temp.jpg");
+            compressed = ImageIO.read(new File(tmpName));
+            Path path = Paths.get(tmpName);
             
             //Delete re-compressed jpg, not needed
             try {
