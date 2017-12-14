@@ -20,10 +20,10 @@ Masked Output Image:
 ## Usage
 Single file mode example:
 ```
-test/test1.jpg
+java -Xmx4096m -jar ELA.jar test/test1.jpg
 ```
 
 Directory mode example:
 ```
-test
+java -Xmx4096m -jar ELA.jar test
 ```
