@@ -37,7 +37,7 @@ public class Main {
     //Default settings
     private static enum Mode { FILE, FOLDER, ERR };             //Strings for different modes
     private static final float COMP_PCT_DEF = 0.95f;            //Default JPG recompression percentage
-    private static final int DIFF_THRESH_DEF = 15;              //Default threshold for error level difference
+    private static final int DIFF_THRESH_DEF = 25;              //Default threshold for error level difference
     private static final int[] MASK_RGB = Pixel.MAGENTA.RGB();  //Default mask pixel color
 
     public static void main(String[] args) {
